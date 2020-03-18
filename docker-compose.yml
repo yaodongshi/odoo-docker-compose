@@ -13,19 +13,28 @@ nginx:
       - odoo-dev:odoo-dev
     restart: always
 postgres-prod:
-    image: postgres:9.6.10-alpine
+# 这里9.6是pg数据库的版本号，根据自己喜欢填写版本
+    image: postgres:11
     environment:
+# 数据库用户名称
         - POSTGRES_USER=odoo
+# 数据库密码
         - POSTGRES_PASSWORD=aaaaaaaaa
     volumes:
+#/home/prod/postgresql 宿主机的数据库配置文件所在位置
         - /home/prod/postgresql:/var/lib/postgresql/data
 odoo-prod:
+#odoo的Dockerfile文件所在的目录
     build: /home/docker/odoo12
     links:
+#链接到的数据名
         - postgres-prod:db
     volumes:
+# 配置文件坐在目录/home/prod/odoo/config
         - /home/prod/odoo/config:/etc/odoo
+# odoo的数据文件所在目录
         - /home/prod/odoo/data:/var/lib/odoo
+# odoo的第三方模块所在目录/home/prod/odoo/extra-addons
         - /home/prod/odoo/extra-addons:/mnt/extra-addons
 postgres-dev:
     image: postgres:9.6.10-alpine

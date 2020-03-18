@@ -1,4 +1,7 @@
+# 这个配置文件是可以直接安装两个不同的odoo
+# 这里是nginx的拉取
 nginx:
+# nginx的版本
     image: nginx:1.14-alpine
     ports:
         - 80:80
@@ -13,7 +16,7 @@ nginx:
       - odoo-dev:odoo-dev
     restart: always
 postgres-prod:
-# 这里9.6是pg数据库的版本号，根据自己喜欢填写版本
+# 这里11是pg数据库的版本号，根据自己喜欢填写版本
     image: postgres:11
     environment:
 # 数据库用户名称

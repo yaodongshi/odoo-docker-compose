@@ -32,7 +32,7 @@ postgres-dev:
     volumes:
         - /home/odoo13/postgresql:/var/lib/postgresql/data
 odoo-dev:
-    build: /home/odoo-decker/docker/13.0
+    build: /home/odoo-docker/docker/13.0
     ports:
         - "8369:8069"
     links:

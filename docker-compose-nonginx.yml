@@ -1,0 +1,43 @@
+postgres-prod:
+# 这里11是pg数据库的版本号，根据自己喜欢填写版本
+    image: postgres:11
+    environment:
+# 数据库用户名称
+        - POSTGRES_USER=odoo12
+# 数据库密码
+        - POSTGRES_PASSWORD=odoo12
+    volumes:
+#/home/prod/postgresql 宿主机的数据库配置文件所在位置
+        - /home/odoo12/postgresql:/var/lib/postgresql/data
+odoo-prod:
+#odoo的Dockerfile文件所在的目录
+    build: /home/odoo-decker/docker/12.0
+    ports:
+        - "8269:8069"
+    links:
+#链接到的数据名
+        - postgres-prod:db
+    volumes:
+# 配置文件坐在目录/home/prod/odoo/config
+        - /home/odoo12/odoo/config:/etc/odoo
+# odoo的数据文件所在目录
+        - /home/odoo12/odoo/data:/var/lib/odoo
+# odoo的第三方模块所在目录/home/prod/odoo/extra-addons
+        - /home/odoo12/odoo/extra-addons:/mnt/extra-addons
+postgres-dev:
+    image: postgres:11
+    environment:
+        - POSTGRES_USER=odoo13
+        - POSTGRES_PASSWORD=odoo13
+    volumes:
+        - /home/odoo13/postgresql:/var/lib/postgresql/data
+odoo-dev:
+    build: /home/odoo-decker/docker/13.0
+    ports:
+        - "8369:8069"
+    links:
+        - postgres-dev:db
+    volumes:
+        - /home/odoo13/odoo/config:/etc/odoo
+        - /home/odoo13/odoo/data:/var/lib/odoo
+        - /home/devodoo13/odoo/extra-addons:/mnt/extra-addons

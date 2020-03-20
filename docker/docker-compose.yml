@@ -1,0 +1,44 @@
+nginx:
+    image: nginx:1.14-alpine
+    ports:
+        - 80:80
+        - 443:443
+    volumes:
+      - /var/www:/var/www
+      - /etc/nginx:/etc/nginx
+      - /home/letsencrypt/etc/letsencrypt/:/data/certs
+      - /home/letsencrypt/data/letsencrypt:/data/letsencrypt
+    links:
+      - odoo-prod:odoo-prod
+      - odoo-dev:odoo-dev
+    restart: always
+postgres-prod:
+    image: postgres:9.6.10-alpine
+    environment:
+        - POSTGRES_USER=odoo
+        - POSTGRES_PASSWORD=aaaaaaaaa
+    volumes:
+        - /home/prod/postgresql:/var/lib/postgresql/data
+odoo-prod:
+    build: /home/docker/odoo12
+    links:
+        - postgres-prod:db
+    volumes:
+        - /home/prod/odoo/config:/etc/odoo
+        - /home/prod/odoo/data:/var/lib/odoo
+        - /home/prod/odoo/extra-addons:/mnt/extra-addons
+postgres-dev:
+    image: postgres:9.6.10-alpine
+    environment:
+        - POSTGRES_USER=odoo
+        - POSTGRES_PASSWORD=aaaaaaaaa
+    volumes:
+        - /home/dev/postgresql:/var/lib/postgresql/data
+odoo-dev:
+    build: /home/docker/odoo12
+    links:
+        - postgres-dev:db
+    volumes:
+        - /home/dev/odoo/config:/etc/odoo
+        - /home/dev/odoo/data:/var/lib/odoo
+        - /home/dev/odoo/extra-addons:/mnt/extra-addons
